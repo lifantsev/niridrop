@@ -28,7 +28,7 @@ function config() {
     if [ -z "${1:-}" ]; then lg E "config called without window name, exiting..."; finish 1; fi
     if [ -z "${2:-}" ]; then lg E "config called without option name, exiting..."; finish 1; fi
 
-    cat "$config_file" | jq -r ".windows.$1.$2"
+    cat "$config_file" | jq -r ".windows.\"$1\".$2"
 }
 
 function set_last() {
