@@ -91,7 +91,9 @@ window-rule {
 
 ### home manager module
 
-This flake exposes a home-manager module that can create all of the necessary configuration files. Import the module and set it up like so:
+This flake exposes a home-manager module that can create all of the necessary configuration files. Import the module and set it up as below.
+
+Note that the module will populate `niridrop.kdl`, but you must include the file yourself. Alternatively, if you use [niri-bind-modes](https://github.com/lifantsev/niri-bind-modes) you may enable `...niri.niridrop.bindModesIntegration = true`. This will use bind-modes' [extraConfig option](https://github.com/lifantsev/niri-bind-modes/blob/main/CONFIGURING.md#extraconfig) to include `niridrop.kdl`.
 ``` nix
 # flake.nix
 inputs.niridrop.url = "github:lifantsev/niridrop";
@@ -120,8 +122,6 @@ programs.niri.niridrop = {
     };
 };
 ```
-
-The module will put all of the required niri settings into `niridrop.kdl`, but you must include the file yourself using `include "niridrop.kdl"`. Alternatively, if you use [niri-bind-modes](https://github.com/lifantsev/niri-bind-modes) you may enable `...niri.niridrop.bindModesIntegration = true`. This will use bind-modes' [extraConfig option](https://github.com/lifantsev/niri-bind-modes/blob/main/CONFIGURING.md#extraconfig) to add the line to `config.kdl` automatically.
 
 ## Installation
 
