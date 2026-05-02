@@ -1,6 +1,6 @@
 # niridrop
 
-A tool to show & hide dropdown windows in niri, and a homemanager module to configure said tool.
+A tool to show & hide dropdown windows in niri.
 
 - [usage](#usage), [configuration](#configuration), [installation](#installation)
 
@@ -10,7 +10,7 @@ A tool to show & hide dropdown windows in niri, and a homemanager module to conf
 - [niri-scratchpad](https://github.com/gvolpe/niri-scratchpad)
 - [rochacbruno's gist](https://gist.github.com/rochacbruno/135eebb88f887fdc45210e466ad13bc7)
 
-I wrote `niridrop` because:
+I wrote niridrop because:
 1. I prefer to define dropdowns in a config file rather than pass long arguments every time I call the tool.
 2. I wanted the tool to keep track of the last shown dropdown and be able to show/hide it.
 3. I wanted to have a cli option `--show` that prevents the tool from hiding the specified window if it's already open (and analogously, `--hide`)
