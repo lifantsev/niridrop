@@ -19,14 +19,28 @@ As far as I could tell none of the available alternatives satisfy these 3 desire
 
 ## Usage
 
+### dropdown management
+#### niridrop name?
+toggle the visibility of the dropdown with the specified name. if no name is passed, toggle visibility of last shown dropdown.
+
+#### niridrop name? --show
+show the dropdown if it is currently hidden, otherwise do nothing
+
+#### niridrop name? --hide
+hide the dropdown if it is currently shown, otherwise do nothing
+
+#### niridrop name? --forget
+the `--forget` option is compatible with all of the above. it prevents the tool from saving this dropdown as the last open one (useful if a script wants to use `niridrop` to show its ui but doesn't want to otherwise interfere with the user's dropdown workflow).
+
+### state management
 #### niridrop --init
-clear the file that keeps track of currently open dropdown windows & the file tracking the last open window.
+clear all info about currently open windows and last opened window. should be called at niri startup to prevent `niridrop` from reading and using stale data.
 
 #### niridrop --kill
-kill all currently open dropdown windows (visible or not) and clear the file keeping track of them.
+kill all currently open windows (visible or not)
 
-#### niridrop <name?>
-show the dropdown named `<name>` if currently hidden, and hide it if currently shown. if no argument is passed, operates on the last opened dropdown.
+#### niridrop --dump
+dump info about currently open windows & last opened window
 
 ## Configuration
 
