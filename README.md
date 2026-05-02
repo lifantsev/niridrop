@@ -2,6 +2,10 @@
 
 This flake contains a script to show & hide dropdown windows in niri, and a homemanager module to configure said script.
 
+- [usage](##Usage)
+- [configuration](##Configuration)
+- [installation](##Installation)
+
 ### alternatives
 
 - [ndrop](https://github.com/Schweber/ndrop/tree/main)
@@ -15,34 +19,30 @@ I wrote `niridrop` because:
 
 As far as I could tell none of the available alternatives have these 3 features.
 
-### toc
-
-- [usage](##Usage)
-
 ## Usage
 
 demonstrate all cli options
 
 ## Configuration
 
-### Niridrop
+### niridrop
 
 what to put into niridrop.json and what it does
 
-### Niri Configuration
+### niri configuration
 
 what options have to be set in niri's config.kdl
 
-### Flake
+### flake
 
 explain how the homemanager module can do all of that automatically
 
 ## Installation
 
-### Flake
+### flake
 
 explain how to install the package using the flake
 
-### Other
+### other
 
 explain how to install on non-nix systems
