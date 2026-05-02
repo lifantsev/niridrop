@@ -2,7 +2,7 @@
 
 A tool to show & hide dropdown windows in niri, and a homemanager module to configure said tool.
 
-- [usage](##Usage), [configuration](##Configuration), [installation](##Installation)
+- [usage](#usage), [configuration](#configuration), [installation](#installation)
 
 ### alternatives
 
@@ -16,6 +16,10 @@ I wrote `niridrop` because:
 3. I wanted to have a cli option `--show` that prevents the tool from hiding the specified window if it's already open (and analogously, `--hide`)
 
 As far as I could tell none of the available alternatives satisfy these 3 desires.
+
+### planned features
+
+- add a `lazy` option to dropdown windows to determine whether they are spawned when `--init` is called (currently they are all lazy).
 
 ## Usage
 
@@ -44,17 +48,80 @@ dump info about currently open windows & last opened window
 
 ## Configuration
 
+Niridrop requires a `niridrop.json` config file as well as some options to be set in niri's `config.kdl`. You can do this manually or use the [home manager module](#home-manager-module).
+
 ### niridrop
 
-what to put into niridrop.json and what it does
+The file `$XDG_CONFIG_HOME/niri/niridrop.json` should contain an attrset of all dropdown windows, along with the name of the workspace they should reside in when hidden.
+``` json
+{
+  "workspace": "dropdown",
+  "windows": {
+    "term": {
+      "app_id": "dropdown-term",
+      "cmd": "kitty --class dropdown-term"
+    },
+    "qalc": {
+      "app_id": "dropdown-qalc",
+      "cmd": "kitty --class dropdown-qalc qalc"
+    }
+  }
+}
+```
 
 ### niri configuration
 
-what options have to be set in niri's config.kdl
+In order for niridrop to work properly, you need to set some niri settings. Declare the named workspace for the dropdown windows, and create window rules to send the windows to this workspace as well as make them spawn floating and unfocused. You may also specify their size here. Finally, call `niridrop --init` on startup. Add something like this to your `config.kdl`:
+``` kdl
+spawn-sh-at-startup "niridrop --init"
 
-### flake
+workspace "dropdown"
 
-explain how the homemanager module can do all of that automatically
+window-rule {
+    match app-id=r#"^dropdown-$"#
+    open-on-workspace "dropdown"
+
+    open-floating true
+    open-focused false
+
+    default-column-width { proportion 0.75; }
+    default-window-height { proportion 0.75; }
+}
+```
+
+### home manager module
+
+This flake exposes a home-manager module that can create all of the necessary configuration files. Import the module and set it up like so:
+``` nix
+# flake.nix
+inputs.niridrop.url = "github:lifantsev/niridrop";
+
+# home.nix
+imports = [ inputs.niridrop.homeManagerModules.default ];
+
+programs.niri.niridrop = {
+    enableJSON = true; # whether to create niridrop.json
+    enableKDL = true; # whether to create niridrop.kdl
+    bindModesIntegration = true; # if you use niri-bind-modes, enable this to automatically include `niridrop.kdl` from inside `config.kdl`
+
+    defaultSize = [ 0.6 0.6 ]; # this defaults to [ 0.75 0.75 ] if not set
+
+    windows = {
+        term = {
+            app_id = "dropdown-term";
+            cmd = "kitty --class dropdown-term";
+            size = [ 0.6 0.3 ]; # you can override the default size
+        };
+
+        qalc = {
+            app_id = "dropdown-qalc";
+            cmd = "kitty --class dropdown-qalc qalc";
+        };
+    };
+};
+```
+
+The module will put all of the required niri settings into `niridrop.kdl`, but you must include the file yourself using `include "niridrop.kdl"`. Alternatively, if you use [niri-bind-modes](https://github.com/lifantsev/niri-bind-modes) you may enable `...niri.niridrop.bindModesIntegration = true`. This will use bind-modes' [extraConfig option](https://github.com/lifantsev/niri-bind-modes/blob/main/CONFIGURING.md#extraconfig) to add the line to `config.kdl` automatically.
 
 ## Installation
 
