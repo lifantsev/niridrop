@@ -127,8 +127,17 @@ programs.niri.niridrop = {
 
 ### flake
 
-explain how to install the package using the flake
+If you are a nix flake user, install the package by adding a niridrop as a flake input:
+``` nix
+# flake.nix
+inputs.niridrop.url = "github:lifantsev/niridrop";
+
+# configuration.nix
+environment.systemPackages = [ inputs.niridrop.packages.${system}.default ];
+```
 
 ### other
 
-explain how to install on non-nix systems
+If you are not a nix user, you can download the [shellscript](https://github.com/lifantsev/niridrop/blob/main/niridrop.sh), add a shebang, and install it however you prefer (maybe put it in ~/.local/bin or create an alias).
+
+Note that the script depends on [lg](https://github.com/lifantsev/lg). If you don't want to install it, just use `sed -i '/ *lg / d' niridrop.sh` to remove all calls to it from the script.
