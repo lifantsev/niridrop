@@ -16,6 +16,7 @@ in {
             pkgs.niri
             pkgs.jq
             pkgs.gnugrep
+            pkgs.gnused
             pkgs.gawk
         ];
     } (builtins.readFile ./niridrop.sh);

@@ -17,10 +17,6 @@ I wrote `niridrop` because:
 
 As far as I could tell none of the available alternatives satisfy these 3 desires.
 
-### planned features
-
-- don't blindly trust the registry file: check that any dropdown we work with is in fact currently open, to prevent breakage when dropdown windows are closed without our knowledge.
-
 ## Usage
 
 ### dropdown management

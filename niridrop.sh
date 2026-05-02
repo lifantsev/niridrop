@@ -12,6 +12,7 @@ touch "$actual_last_file" &>/dev/null
 
 special_workspace="$(cat "$config_file" | jq -r .workspace)"
 [[ "$special_workspace" == "null" ]] && special_workspace=dropdown
+[[ -z "$special_workspace" ]] && special_workspace=dropdown
 
 lg start
 
@@ -67,6 +68,24 @@ function registry_query() {
     if [ -z "${1:-}" ]; then lg E "registry_query called without dropdown name, exiting..."; finish 1; fi
 
     name="$1"; lg F "registry_query, name[$name]"
+
+    if registry_contains "$name"; then
+        id="$(awk "/^$name / { print \$NF }" "$registry_file")"
+
+        lg . "checking that dropdown[$name] with id[$id] is actually open"
+
+        window_info="$(niri msg --json windows | jq -r ".[] | select(.id == $id)")"
+
+        if [[ -n "$window_info" ]] && [[ "$window_info" != "null" ]]; then
+            lg . "the window is open, returning id[$id]"
+            echo "$id"
+            return 0
+        fi
+
+        lg I "the dropdown[$name] with id[$id] seems to no longer be open, removing it from registry"
+
+        sed -i "/^$name / d" "$registry_file"
+    fi
 
     if ! registry_contains "$name"; then
         lg . "registry does not contain name[$name], spawning the window..."
