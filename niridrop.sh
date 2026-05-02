@@ -211,7 +211,7 @@ if (( flag_dump )); then
 
     echo
 
-    echo "# last[$last_file] ''''"
+    echo "# last[$last_file] '''"
     cat "$last_file"
     echo "'''"
 
