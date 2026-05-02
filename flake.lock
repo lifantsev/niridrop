@@ -1,0 +1,48 @@
+{
+  "nodes": {
+    "lg": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1777683061,
+        "narHash": "sha256-pTJpZOwXScLEwmJRidavW4+67XhUiPBhyl/DAExMbhQ=",
+        "owner": "lifantsev",
+        "repo": "lg",
+        "rev": "1a6e0fb6a41353beeba4a92ab6d4b5b9c70173da",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lifantsev",
+        "repo": "lg",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1777428379,
+        "narHash": "sha256-ypxFOeDz+CqADEQNL72haqGjvZQdBR5Vc7pyx2JDttI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "755f5aa91337890c432639c60b6064bb7fe67769",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "lg": "lg",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
