@@ -2,9 +2,7 @@
 
 This flake contains a script to show & hide dropdown windows in niri, and a homemanager module to configure said script.
 
-- [usage](##Usage)
-- [configuration](##Configuration)
-- [installation](##Installation)
+- [usage](##Usage), [configuration](##Configuration), [installation](##Installation)
 
 ### alternatives
 
