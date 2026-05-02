@@ -2,11 +2,14 @@
 
 export LGSTEM=niridrop
 
+config_file="$XDG_CONFIG_HOME/niri/niridrop.json"
 registry_file="$XDG_STATE_HOME/niridrop/registry"
 last_file="$XDG_STATE_HOME/niridrop/last"
 mkdir -p "$XDG_STATE_HOME/niridrop" &>/dev/null
 touch "$registry_file" &>/dev/null
 touch "$last_file" &>/dev/null
+
+special_workspace="$(cat "$config_file" | jq -r .workspace)"
 
 lg start
 
@@ -22,7 +25,7 @@ function config() {
     if [ -z "${1:-}" ]; then lg E "config called without window name, exiting..."; finish 1; fi
     if [ -z "${2:-}" ]; then lg E "config called without option name, exiting..."; finish 1; fi
 
-    cat "$XDG_CONFIG_HOME/niridrop/config.json" | jq -r ".$1.$2"
+    cat "$config_file" | jq -r ".windows.$1.$2"
 }
 
 function set_last() {
@@ -71,7 +74,7 @@ function registry_query() {
         fi
     fi
 
-    id="$(awk "/$name / { print \$NF }" "$registry_file")"
+    id="$(awk "/^$name / { print \$NF }" "$registry_file")"
 
     lg . "fetched id[$id] from registry, returning"
 
@@ -142,8 +145,8 @@ function hide_window() {
     lg . "focusing-tiling to unfocus dropdown"
     niri msg action focus-tiling # NOTE this doesnt work if there is no tiled window on ws
 
-    lg . "moving dropdown (id[$id]) back to dropdown workspace"
-    niri msg action move-window-to-workspace --window-id "$id" "dropdown"
+    lg . "moving dropdown (id[$id]) back to $special_workspace workspace"
+    niri msg action move-window-to-workspace --window-id "$id" "$special_workspace"
 }
 
 function is_open() {
@@ -158,7 +161,7 @@ function is_open() {
     name="$(niri msg --json workspaces | jq -r "first(.[] | select(.id == $workspace)) | .name")"
     lg . "workspace[$workspace] has name[$name]"
 
-    ! [[ "$name" == "dropdown" ]]
+    ! [[ "$name" == "$special_workspace" ]]
 }
 
 lg I "processing cmd line arguments"
@@ -206,11 +209,13 @@ if (( flag_dump )); then
 
     echo "# registry[$registry_file] '''"
     cat "$registry_file"
-    echo "''''"
+    echo "'''"
+
+    echo
 
     echo "# last[$last_file] ''''"
     cat "$last_file"
-    echo "''''"
+    echo "'''"
 
     finish
 fi

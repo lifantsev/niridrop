@@ -1,8 +1,9 @@
 { lib, cfg, ... }: lib.mkMerge [
     (lib.mkIf cfg.enableJSON {
-        xdg.configFile."niridrop/config.json".text = builtins.toJSON (
-            lib.mapAttrs (dropdown: defn: { inherit (defn) app_id cmd; }) cfg.dropdowns
-        );
+        xdg.configFile."niri/niridrop.json".text = builtins.toJSON {
+            workspace = cfg.workspace;
+            windows = lib.mapAttrs (dropdown: defn: { inherit (defn) app_id cmd; }) cfg.windows;
+        };
     })
 
     (lib.mkIf cfg.bindModesIntegration {
@@ -28,7 +29,7 @@
                     default-column-width { proportion ${builtins.toString (builtins.elemAt defn.size 0)}; }
                     default-window-height { proportion ${builtins.toString (builtins.elemAt defn.size 1)}; }
                 }
-            '') cfg.dropdowns)}
+            '') cfg.windows)}
         '';
     })
 ]

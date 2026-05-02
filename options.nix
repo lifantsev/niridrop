@@ -1,5 +1,5 @@
 { lib, cfg, ... }: {
-    enableJSON = lib.mkEnableOption "creation of .config/niridrop/config.json (this will write all dropdowns along with their app_id & cmd)";
+    enableJSON = lib.mkEnableOption "creation of niridrop.json (this will write all dropdowns along with their app_id & cmd)";
 
     enableKDL = lib.mkEnableOption "creation of niridrop.kdl (with window rules & workspace definition)";
 
@@ -19,7 +19,7 @@
         example = [ 0.6 0.3 ];
     };
 
-    dropdowns = lib.mkOption {
+    windows = lib.mkOption {
         description = "an attrset describing all dropdown windows";
         type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: { options = {
             enable = lib.mkEnableOption "setup of the ${name} dropdown window";
