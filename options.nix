@@ -24,6 +24,13 @@
         type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: { options = {
             enable = lib.mkEnableOption "setup of the ${name} dropdown window";
 
+            lazy = lib.mkOption {
+                description = "whether to wait until the first time the dropdown is requested to spawn it (otherwise it's spawned on --init)";
+                type = lib.types.bool;
+                default = false;
+                example = true;
+            };
+
             app_id = lib.mkOption {
                 description = "the app_id that this window will have when spawned";
                 type = lib.types.str;

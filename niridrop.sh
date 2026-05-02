@@ -28,7 +28,7 @@ function config() {
     if [ -z "${1:-}" ]; then lg E "config called without window name, exiting..."; finish 1; fi
     if [ -z "${2:-}" ]; then lg E "config called without option name, exiting..."; finish 1; fi
 
-    cat "$config_file" | jq -r ".windows.\"$1\".$2"
+    jq -r ".windows.\"$1\".$2" "$config_file"
 }
 
 function set_last() {
@@ -255,6 +255,12 @@ if (( flag_init )); then
     echo -n > "$registry_file"
     echo -n > "$last_file"
     echo -n > "$actual_last_file"
+
+    lg . "init: spawning all non-lazy dropdowns"
+    jq -r ".windows | to_entries[] | select(.value.lazy | not).key" "$config_file" |
+        while IFS= read -r name; do
+            spawn_window "$name"
+        done
 
     finish
 fi

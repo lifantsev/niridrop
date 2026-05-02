@@ -17,10 +17,6 @@ I wrote niridrop because:
 
 As far as I could tell none of the available alternatives satisfy these 3 desires.
 
-### planned features
-
-- add a `lazy` option to dropdown windows to determine whether they are spawned when `--init` is called (currently they are all lazy).
-
 ## Usage
 
 ### dropdown management
@@ -38,7 +34,7 @@ the forget option is compatible with all of the above; it prevents the tool from
 
 ### state management
 #### niridrop --init|-i
-clear all info about currently open windows and last opened window; should be called at niri startup to prevent usage of stale data
+clear all info about currently open windows and last opened window, and spawn all dropdown windows not marked as lazy; should be called at niri startup to prevent usage of stale data
 
 #### niridrop --kill|-k
 kill all currently open windows (visible or not)
@@ -52,18 +48,20 @@ Niridrop requires a `niridrop.json` config file as well as some options to be se
 
 ### niridrop
 
-The file `$XDG_CONFIG_HOME/niri/niridrop.json` should contain an attrset of all dropdown windows, along with the name of the workspace they should reside in when hidden.
+The file `$XDG_CONFIG_HOME/niri/niridrop.json` should contain an attrset of all dropdown windows, along with the name of the workspace they should reside in when hidden. The lazy key determines if the window spawns when `--init` is called or when it is first shown.
 ``` json
 {
   "workspace": "dropdown",
   "windows": {
     "term": {
       "app_id": "dropdown-term",
-      "cmd": "kitty --class dropdown-term"
+      "cmd": "kitty --class dropdown-term",
+      "lazy": false
     },
     "qalc": {
       "app_id": "dropdown-qalc",
-      "cmd": "kitty --class dropdown-qalc qalc"
+      "cmd": "kitty --class dropdown-qalc qalc",
+      "lazy": true
     }
   }
 }
@@ -113,6 +111,7 @@ programs.niri.niridrop = {
             app_id = "dropdown-term";
             cmd = "kitty --class dropdown-term";
             size = [ 0.6 0.3 ]; # you can override the default size
+            lazy = true; # defaults to false if not set
         };
 
         qalc = {

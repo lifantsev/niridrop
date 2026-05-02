@@ -2,7 +2,7 @@
     (lib.mkIf cfg.enableJSON {
         xdg.configFile."niri/niridrop.json".text = builtins.toJSON {
             workspace = cfg.workspace;
-            windows = lib.mapAttrs (dropdown: defn: { inherit (defn) app_id cmd; }) cfg.windows;
+            windows = lib.mapAttrs (dropdown: defn: { inherit (defn) app_id cmd lazy; }) cfg.windows;
         };
     })
 
