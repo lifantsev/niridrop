@@ -1,5 +1,3 @@
-# niridrop/src.sh
-
 export LGSTEM=niridrop
 
 config_file="$XDG_CONFIG_HOME/niri/niridrop.json"
