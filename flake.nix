@@ -11,5 +11,12 @@
     outputs = { nixpkgs, ... }@args: {
         packages = nixpkgs.lib.genAttrs [ "aarch64-linux" "x86_64-linux" ]
                                         (import ./package.nix args);
+
+        homeManagerModules.default = args: let
+            arguments = args // { cfg = args.config.programs.niri.niridrop; };
+        in {
+            options.programs.niri.niridrop = import ./options.nix arguments;
+            config = import ./config.nix arguments;
+        };
     };
 }
