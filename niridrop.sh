@@ -3,11 +3,15 @@ export LGSTEM=niridrop
 config_file="$XDG_CONFIG_HOME/niri/niridrop.json"
 registry_file="$XDG_STATE_HOME/niridrop/registry"
 last_file="$XDG_STATE_HOME/niridrop/last"
+actual_last_file="$XDG_STATE_HOME/niridrop/actual_last"
+
 mkdir -p "$XDG_STATE_HOME/niridrop" &>/dev/null
 touch "$registry_file" &>/dev/null
 touch "$last_file" &>/dev/null
+touch "$actual_last_file" &>/dev/null
 
 special_workspace="$(cat "$config_file" | jq -r .workspace)"
+[[ "$special_workspace" == "null" ]] && special_workspace=dropdown
 
 lg start
 
@@ -29,13 +33,14 @@ function config() {
 function set_last() {
     if [ -z "${1:-}" ]; then lg E "set_last called without dropdown name, exiting..."; finish 1; fi
 
-    name="$1"; lg F "set_last, name[$name]"
-    echo "$name" > "$last_file"
+    name="$1"; lg F "set_last, name[$name], flag_forget[$flag_forget]"
+
+    (( ! flag_forget )) && echo "$name" > "$last_file"
+    echo "$name" > "$actual_last_file"
 }
 
-function get_last() {
-    cat "$last_file"
-}
+function get_last() { cat "$last_file"; }
+function get_actual_last() { cat "$actual_last_file"; }
 
 function registry_contains() {
     if [ -z "${1:-}" ]; then lg E "registry_contains called without dropdown name, exiting..."; finish 1; fi
@@ -168,16 +173,18 @@ flag_init=0
 flag_kill=0
 flag_show=0
 flag_hide=0
+flag_forget=0
 
 flag_dump=0
 
 while [ -n "${1:-}" ]; do
     case "$1" in
-        "--init") flag_init=1; lg . "flag_init[$flag_init]" ;;
-        "--kill") flag_kill=1; lg . "flag_kill[$flag_kill]" ;;
-        "--show") flag_show=1; lg . "flag_show[$flag_show]" ;;
-        "--hide") flag_hide=1; lg . "flag_hide[$flag_hide]" ;;
-        "--dump") flag_dump=1; lg . "flag_dump[$flag_dump]" ;;
+        "--init"|"-i") flag_init=1; lg . "flag_init[$flag_init]" ;;
+        "--kill"|"-k") flag_kill=1; lg . "flag_kill[$flag_kill]" ;;
+        "--dump"|"-d") flag_dump=1; lg . "flag_dump[$flag_dump]" ;;
+        "--show"|"-s") flag_show=1; lg . "flag_show[$flag_show]" ;;
+        "--hide"|"-h") flag_hide=1; lg . "flag_hide[$flag_hide]" ;;
+        "--forget"|"-f") flag_forget=1; lg . "flag_forget[$flag_forget]" ;;
         "-"*) lg E "unrecognized command line flag[$1]"; finish 1 ;;
         *) # setting name of dropdown to operate on
             if [ -n "$arg_name" ]; then
@@ -203,7 +210,7 @@ if (( flag_dump && (flag_show||flag_hide||flag_kill||flag_init)))
 then lg E "the dump flag must be the only one passed"; finish 1; fi
 
 if (( flag_dump )); then
-    lg . "dump: printing contents of registry[$registry_file] and last[$last_file]"
+    lg . "dump: printing contents of registry[$registry_file], last[$last_file], actual_last[$actual_last_file]"
 
     echo "# registry[$registry_file] '''"
     cat "$registry_file"
@@ -215,13 +222,20 @@ if (( flag_dump )); then
     cat "$last_file"
     echo "'''"
 
+    echo
+
+    echo "# actual_last[$actual_last_file] '''"
+    cat "$actual_last_file"
+    echo "'''"
+
     finish
 fi
 
 if (( flag_init )); then
-    lg . "init: clearing registry[$registry_file] and last[$last_file]"
+    lg . "init: clearing registry[$registry_file], last[$last_file], and actual_last[$actual_last_file]"
     echo -n > "$registry_file"
     echo -n > "$last_file"
+    echo -n > "$actual_last_file"
 
     finish
 fi
@@ -265,15 +279,16 @@ fi
 # main dropdown logic/functionality
 
 arg_last="$(get_last)"
-lg I "main functionality with name[$arg_name], last[$arg_last], show[$flag_show], hide[$flag_hide]"
+arg_actual_last="$(get_actual_last)"
+lg I "main functionality with name[$arg_name], last[$arg_last], actual_last[$arg_actual_last] show[$flag_show], hide[$flag_hide]"
 
-if [[ -n "$arg_last" ]] && is_open "$arg_last"; then
-    if [[ -n "$arg_name" ]] && [[ "$arg_name" != "$arg_last" ]]; then
+if [[ -n "$arg_actual_last" ]] && is_open "$arg_actual_last"; then
+    if [[ -n "$arg_name" ]] && [[ "$arg_name" != "$arg_actual_last" ]]; then
 
         lg I "last is open, replacing with new drop"
         if (( flag_hide ))
         then lg . "flag_hide was set, doing nothing"; else
-            hide_window "$arg_last"
+            hide_window "$arg_actual_last"
             show_window "$arg_name"
         fi
 
@@ -282,7 +297,7 @@ if [[ -n "$arg_last" ]] && is_open "$arg_last"; then
         lg I "last is open & we have nothing new to open, closing last"
         if (( flag_show ))
         then lg . "flag_show was set, doing nothing"; else
-            hide_window "$arg_last"
+            hide_window "$arg_actual_last"
         fi
 
     fi
