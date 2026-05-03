@@ -142,4 +142,4 @@ environment.systemPackages = [ inputs.niridrop.packages.${system}.default ];
 
 If you are not a nix user, you can download the [shellscript](https://github.com/lifantsev/niridrop/blob/main/niridrop.sh), add a shebang, and install it however you prefer (maybe put it in ~/.local/bin or create an alias).
 
-Note that the script depends on [lg](https://github.com/lifantsev/lg). If you don't want to install it, just use `sed -i '/ *lg / d' niridrop.sh` to remove all calls to it from the script.
+Note that the script optionally depends on [lg](https://github.com/lifantsev/lg). If you don't want to install it, just use `sed -i '/ *lg / d' niridrop.sh` to remove all calls to it from the script.
