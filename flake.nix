@@ -8,9 +8,17 @@
         lg.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = { nixpkgs, ... }@args: {
+    outputs = { self, nixpkgs, ... }@args: {
         packages = nixpkgs.lib.genAttrs [ "aarch64-linux" "x86_64-linux" ]
                                         (import ./package.nix args);
+
+        nixosModules.default = { pkgs, ... }: {
+            nixpkgs.overlays = [(final: prev: {
+                niridrop = self.packages.${final.system}.default;
+            })];
+
+            environment.systemPackages = [ pkgs.niridrop ];
+        };
 
         homeManagerModules.default = args: let
             arguments = args // { cfg = args.config.programs.niri.niridrop; };

@@ -126,12 +126,15 @@ programs.niri.niridrop = {
 
 ### flake
 
-If you are a nix flake user, install the package by adding a niridrop as a flake input:
+If you are a nix flake user, add a flake input and import the nixos module.
 ``` nix
 # flake.nix
 inputs.niridrop.url = "github:lifantsev/niridrop";
 
 # configuration.nix
+imports = [ inputs.niridrop.nixosModules.default ]; # this will also add pkgs.niridrop using an overlay
+
+# alternatively, install the package manually
 environment.systemPackages = [ inputs.niridrop.packages.${system}.default ];
 ```
 

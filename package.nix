@@ -1,17 +1,16 @@
 { nixpkgs, lg, ... }: system: let
-    pkgs = import nixpkgs { inherit system; } // {
-        lg = lg.packages.${system}.default;
-    };
+    pkgs = import nixpkgs { inherit system; };
+    lg_pkg = lg.packages.${system}.default;
 in {
     default = pkgs.resholve.writeScriptBin "niridrop" {
         interpreter = "${pkgs.bash}/bin/bash";
         execer = [
             "cannot:${pkgs.niri}/bin/niri"
-            "cannot:${pkgs.lg}/bin/lg"
+            "cannot:${lg_pkg}/bin/lg"
         ];
 
         inputs = [
-            pkgs.lg
+            lg_pkg
             pkgs.coreutils
             pkgs.niri
             pkgs.jq
