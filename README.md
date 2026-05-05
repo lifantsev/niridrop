@@ -20,27 +20,25 @@ As far as I could tell none of the available alternatives satisfy these 3 desire
 ## Usage
 
 ### dropdown management
-#### niridrop \[name]
-toggle the visibility of the dropdown with the specified name; if no name is passed, toggle visibility of last shown dropdown (note that niridrop will automatically spawn the dropdown window if it isn't currently open)
+``` sh
+niridrop [name] [--show|--hide] [--forget]
+```
+If *name* is given, operates on the dropdown window with that name, otherwise operates on the last opened one.
 
-#### niridrop \[name] --show|-s
-show the dropdown if it is currently hidden, otherwise do nothing
+If *show* or *hide* are passed, only completes actions that would result in the specified window being shown/hidden.
 
-#### niridrop \[name] --hide|-h
-hide the dropdown if it is currently shown, otherwise do nothing
-
-#### niridrop \[name] --forget|-f
-the forget option is compatible with all of the above; it prevents the tool from saving this dropdown as the last open one (useful if a script wants to use `niridrop` to show its ui but doesn't want to otherwise interfere with the user's dropdown workflow)
+If *forget* is passed, doesn't save this dropdown as the last opened one (useful to show a ui without interfering with the user's dropdown workflow)
 
 ### state management
-#### niridrop --init|-i
-clear all info about currently open windows and last opened window, and spawn all dropdown windows not marked as lazy; should be called at niri startup to prevent usage of stale data
+``` sh
+niridrop [--init|--kill|--dump]
+```
 
-#### niridrop --kill|-k
-kill all currently open windows (visible or not)
+If *init* is passed, forget all info about currently open windows, and spawn all non-lazy dropdown windows (should be called at niri startup).
 
-#### niridrop --dump|-d
-dump info about currently open windows & last opened window
+If *kill* is passed, close all currently open dropdown windows (visible or not)
+
+If *dump* is passed, dump info about all currently open windows & last opened window.
 
 ## Configuration
 
