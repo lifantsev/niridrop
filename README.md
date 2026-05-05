@@ -27,7 +27,7 @@ If *name* is given, operates on the dropdown window with that name, otherwise op
 
 If *show* or *hide* are passed, only completes actions that would result in the specified window being shown/hidden.
 
-If *forget* is passed, doesn't save this dropdown as the last opened one (useful to show a ui without interfering with the user's dropdown workflow)
+If *forget* is passed, doesn't save this dropdown as the last opened one (useful if you want to show a ui without otherwise interfering with the user's dropdown workflow)
 
 ### state management
 ``` sh
@@ -38,7 +38,7 @@ If *init* is passed, forget all info about currently open windows, and spawn all
 
 If *kill* is passed, close all currently open dropdown windows (visible or not)
 
-If *dump* is passed, dump info about all currently open windows & last opened window.
+If *dump* is passed, print info about all currently open windows & last opened window.
 
 ## Configuration
 
@@ -46,7 +46,7 @@ Niridrop requires a `niridrop.json` config file as well as some options to be se
 
 ### niridrop
 
-The file `$XDG_CONFIG_HOME/niri/niridrop.json` should contain an attrset of all dropdown windows, along with the name of the workspace they should reside in when hidden. The lazy key determines if the window spawns when `--init` is called or when it is first shown.
+The file `$XDG_CONFIG_HOME/niri/niridrop.json` should contain the name of the workspace to send hidden dropdowns to, as well as an attrset of all dropdown windows. Setting *lazy* to true prevents the window from being spawned when `niridrop --init` is called.
 ``` json
 {
   "workspace": "dropdown",
