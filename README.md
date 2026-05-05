@@ -9,8 +9,7 @@ I wrote niridrop because:
 2. I wanted the tool to keep track of the last shown dropdown and be able to show/hide it.
 3. I wanted to have a cli option `--show` that prevents the tool from hiding the specified window if it's already open (and analogously, `--hide`)
 
-As far as I could tell none of the available alternatives satisfy these 3 desires
-- [ndrop](https://github.com/Schweber/ndrop/tree/main), [niri-scratchpad](https://github.com/gvolpe/niri-scratchpad), [rochacbruno's gist](https://gist.github.com/rochacbruno/135eebb88f887fdc45210e466ad13bc7)
+As far as I could tell these features are not present in the alternatives: [ndrop](https://github.com/Schweber/ndrop/tree/main), [niri-scratchpad](https://github.com/gvolpe/niri-scratchpad), [rochacbruno's gist](https://gist.github.com/rochacbruno/135eebb88f887fdc45210e466ad13bc7).
 
 ## Usage
 
