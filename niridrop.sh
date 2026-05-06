@@ -121,7 +121,6 @@ function spawn_window() {
 
     niri msg action spawn-sh -- "$cmd" &
 
-    niri msg --json event-stream |
     while read -r line; do
         case $line in
             '{"WindowOpenedOrChanged":'*)
@@ -131,14 +130,17 @@ function spawn_window() {
             lg . "captured new window with app_id[$win_app_id], id[$win_id]"
 
             if [ "$win_app_id" == "$app_id" ]; then
-                lg . "matched, registering id[$win_id], returning focus to old id[$focused_id], & returning"
+                lg . "matched, registering id[$win_id]"
                 registry_add "$name" "$win_id"
+
+                lg . "returning focus to old id[$focused_id]"
                 sleep 0.01 && niri msg action focus-window --id "$focused_id" &
+
                 return 0
             fi
             ;;
         esac
-    done
+    done < <(niri msg --json event-stream)
 }
 
 function show_window() {
@@ -259,6 +261,7 @@ if (( flag_init )); then
     lg . "init: spawning all non-lazy dropdowns"
     jq -r ".windows | to_entries[] | select(.value.lazy | not).key" "$config_file" |
         while IFS= read -r name; do
+            lg . "init: spawning [$name]"
             spawn_window "$name"
         done
 
