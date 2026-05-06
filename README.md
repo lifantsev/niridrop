@@ -4,6 +4,8 @@ A tool to show & hide dropdown windows in niri.
 
 - [usage](#usage), [configuration](#configuration), [installation](#installation)
 
+<img width="1080" height="675" alt="demo" src="https://github.com/user-attachments/assets/dd826f6d-65c3-4b94-8ecd-a53c01c5e44a" />
+
 I wrote niridrop because:
 1. I prefer to define dropdowns in a config file rather than pass long arguments every time I call the tool.
 2. I wanted the tool to keep track of the last shown dropdown and be able to show/hide it.
