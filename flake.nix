@@ -21,10 +21,10 @@
         };
 
         homeManagerModules.default = args: let
-            arguments = args // { cfg = args.config.programs.niri.niridrop; };
+            args' = args // { cfg = args.config.programs.niri.niridrop; };
         in {
-            options.programs.niri.niridrop = import ./options.nix arguments;
-            config = import ./config.nix arguments;
+            options.programs.niri.niridrop = import ./options.nix args';
+            config = import ./config.nix args';
         };
     };
 }

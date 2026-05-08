@@ -1,9 +1,5 @@
 { lib, cfg, ... }: {
-    enableJSON = lib.mkEnableOption "creation of niridrop.json (this will write all dropdowns along with their app_id & cmd)";
-
-    enableKDL = lib.mkEnableOption "creation of niridrop.kdl (with window rules & workspace definition)";
-
-    bindModesIntegration = lib.mkEnableOption "usage of the programs.niri.bind-modes.extraConfig option to automatically include `niridrop.kdl`";
+    enable = lib.mkEnableOption "creation of niridrop.json and setting relevant niri settings using niri-flake";
 
     workspace = lib.mkOption {
         description = "name of the workspace to send dropdown windows to";

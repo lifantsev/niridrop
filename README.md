@@ -13,6 +13,8 @@ I wrote niridrop because:
 
 As far as I could tell these features are not present in the alternatives: [ndrop](https://github.com/Schweber/ndrop/tree/main), [niri-scratchpad](https://github.com/gvolpe/niri-scratchpad), [rochacbruno's gist](https://gist.github.com/rochacbruno/135eebb88f887fdc45210e466ad13bc7).
 
+This flake's home module uses `programs.niri.settings` for things like window rules. In order to turn that into a `config.kdl`, use [niri-flake](https://github.com/sodiboo/niri-flake).
+
 ## Usage
 
 ### dropdown management
@@ -85,13 +87,18 @@ window-rule {
 
 This flake exposes a home-manager module that can create all of the necessary configuration files. Import the module and set it up as below.
 
-Note that the module will populate `niridrop.kdl`, but you must include the file yourself. Alternatively, if you use [niri-bind-modes](https://github.com/lifantsev/niri-bind-modes) you may enable `...niri.niridrop.bindModesIntegration = true`. This will use bind-modes' [extraConfig option](https://github.com/lifantsev/niri-bind-modes/blob/main/CONFIGURING.md#extraconfig) to include `niridrop.kdl`.
+Note that the module will populate `programs.niri.settings`, but you must import [niri-flake's](https://github.com/sodiboo/niri-flake) config module yourself.
+
 ``` nix
 # flake.nix
 inputs.niridrop.url = "github:lifantsev/niridrop";
+inputs.niri.url = "github:sodiboo/niri-flake";
 
 # home.nix
-imports = [ inputs.niridrop.homeManagerModules.default ];
+imports = [
+    inputs.niridrop.homeManagerModules.default
+    inputs.niri.homeModules.config
+];
 
 programs.niri.niridrop = {
     enableJSON = true; # whether to create niridrop.json
