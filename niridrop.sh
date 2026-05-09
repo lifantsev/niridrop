@@ -234,7 +234,7 @@ if (( flag_init )); then
     jq -r ".windows | to_entries[] | select(.value.lazy | not).key" "$config_file" |
         while IFS= read -r name; do
             lga . "init: spawning [$name]"
-            spawn_window "$name"
+            spawn_window "$name" > /dev/null
         done
 fi
 
