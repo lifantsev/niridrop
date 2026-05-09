@@ -95,10 +95,10 @@ function show_window() {
     set_last "$name" &
 
     lga . "moving win[$id] to current workspace[$workspace]"
-    niri msg action move-window-to-workspace --window-id "$id" "$workspace"
+    niri msg action move-window-to-workspace --window-id "$id" "$workspace" &
 
     lga . "focusing window[$id]"
-    niri msg action focus-window --id "$id"
+    niri msg action focus-window --id "$id" &
 }
 
 function hide_window() {
@@ -114,13 +114,13 @@ function hide_window() {
     lga . "got current ws idx[$ws_idx]"
 
     lga . "focusing-tiling to unfocus dropdown"
-    niri msg action focus-tiling
+    niri msg action focus-tiling &
 
     lga . "moving dropdown (id[$id]) back to $special_workspace workspace"
-    niri msg action move-window-to-workspace --window-id "$id" "$special_workspace"
+    niri msg action move-window-to-workspace --window-id "$id" "$special_workspace" &
 
     lga . "focusing previous ws"
-    niri msg action focus-workspace "$ws_idx"
+    niri msg action focus-workspace "$ws_idx" &
 }
 
 function is_shown() {
@@ -217,7 +217,7 @@ if (( flag_kill || flag_init )); then
             lga . "app_id[$app_id] didn't match any window"
         else
             lga . "closing window[$win_id]"
-            niri msg action close-window --id "$win_id"
+            niri msg action close-window --id "$win_id" &
         fi
     done <<< "$(cat ~/.config/niri/niridrop.json | jq -r '.windows | to_entries | .[].value.app_id')"
 fi
