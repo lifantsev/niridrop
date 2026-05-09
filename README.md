@@ -29,14 +29,14 @@ If *forget* is passed, doesn't save this dropdown as the last opened one (useful
 
 ### state management
 ``` sh
-niridrop [--init|--kill|--dump]
+niridrop [--kill|--init|--dump]
 ```
-
-If *init* is passed, forget all info about currently open windows, and spawn all non-lazy dropdown windows (should be called at niri startup).
 
 If *kill* is passed, close all currently open dropdown windows (visible or not)
 
-If *dump* is passed, print info about all currently open windows & last opened window.
+If *init* is passed, run --kill and then spawn all non-lazy dropdown windows (should be called at niri startup).
+
+If *dump* is passed, print info about all configured windows & last opened window.
 
 ## Configuration
 
