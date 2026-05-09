@@ -70,10 +70,6 @@ function spawn_window() {
             if [ "$win_app_id" == "$app_id" ]; then
                 lga . "matched, returning window id id[$win_id]"
                 echo "$win_id"
-
-                lga . "returning focus to old id[$focused_id]"
-                sleep 0.01 && niri msg action focus-window --id "$focused_id" &
-
                 return 0
             fi
             ;;
@@ -85,6 +81,9 @@ function show_window() {
     if [ -z "${1:-}" ]; then lge "show_window called without name, exiting..."; finish 1; fi
     name="$1"; lga F "show_window, name[$name]"
 
+    workspace="$(niri msg --json workspaces | jq -r "first(.[] | select(.is_active)).idx")"
+    lga . "save current ws idx[$workspace]"
+
     cfg_app_id="$(config "$name" "app_id")"
 
     id="$(niri msg --json windows | jq -r ".[] | select(.app_id == \"$cfg_app_id\").id")"
@@ -94,8 +93,6 @@ function show_window() {
     fi
 
     set_last "$name" &
-
-    workspace="$(niri msg --json workspaces | jq -r "first(.[] | select(.is_active)).idx")"
 
     lga . "moving win[$id] to current workspace[$workspace]"
     niri msg action move-window-to-workspace --window-id "$id" "$workspace"
@@ -226,15 +223,26 @@ if (( flag_kill || flag_init )); then
 fi
 
 if (( flag_init )); then
-    lga . "init: last[$last_file], and actual_last[$actual_last_file]"
+    lga . "init: clearing last[$last_file], and actual_last[$actual_last_file]"
     echo -n > "$last_file"
     echo -n > "$actual_last_file"
+
+    ws_idx="$(niri msg --json workspaces | jq -r "first(.[] | select(.is_active)).idx")"
+    lga . "saving workspace idx[$ws_idx] to focus back"
+
 
     lga . "init: spawning all non-lazy dropdowns"
     jq -r ".windows | to_entries[] | select(.value.lazy | not).key" "$config_file" |
         while IFS= read -r name; do
             lga . "init: spawning [$name]"
             spawn_window "$name" > /dev/null
+
+            # lock focus on this workspace
+            sleep 0.01 && niri msg action focus-workspace "$ws_idx" &
+            sleep 0.02 && niri msg action focus-workspace "$ws_idx" &
+            sleep 0.03 && niri msg action focus-workspace "$ws_idx" &
+            sleep 0.04 && niri msg action focus-workspace "$ws_idx" &
+            sleep 0.05 && niri msg action focus-workspace "$ws_idx" &
         done
 fi
 
