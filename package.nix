@@ -1,16 +1,18 @@
 { nixpkgs, lg, ... }: system: let
     pkgs = import nixpkgs { inherit system; };
-    lg_pkg = lg.packages.${system}.default;
+    lga = lg.packages.${system}.lga;
+    lge = lg.packages.${system}.lge;
 in {
     default = pkgs.resholve.writeScriptBin "niridrop" {
         interpreter = "${pkgs.bash}/bin/bash";
         execer = [
             "cannot:${pkgs.niri}/bin/niri"
-            "cannot:${lg_pkg}/bin/lg"
+            "cannot:${lga}/bin/lga"
+            "cannot:${lge}/bin/lge"
         ];
 
         inputs = [
-            lg_pkg
+            lga lge
             pkgs.coreutils
             pkgs.niri
             pkgs.jq
@@ -19,5 +21,4 @@ in {
             pkgs.gawk
         ];
     } (builtins.readFile ./niridrop.sh);
-
 }
